@@ -25,11 +25,11 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import init.qcom.usb.rc
+import init.qcom.rc
 # import init.target.rc
 
 on early-init
-    write /sys/block/mmcblk0/queue/scheduler noop
+    write /sys/block/mmcblk0/queue/scheduler
 
 on init
     loglevel 8
@@ -38,19 +38,18 @@ on init
     mkdir /persist 0771 system system
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
-    mkdir /storage/emulated 0555 root root
+    mkdir /storage/emulated 0555 root
 
     #External storage directories
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_r
     mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/emulated/legacy 0555 root root
-    mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
+    mkdir /storage/emulated/legacy 0555 root
     mkdir /storage/usbdisk 0700 root root
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
     export EMULATED_STORAGE_TARGET /storage/emulated
-    export SECONDARY_STORAGE /storage/sdcard1
+    export SECONDARY_STORAGE /storage/sdcard0
 
     # Support legacy paths
     symlink /storage/emulated/legacy /sdcard
@@ -104,9 +103,9 @@ on boot
     chmod 2770 /dev/socket/qmux_gps
 
     # Prevents permission denied error for telephony
-    chmod 0644 /proc/cmdline
+    chmod 0678 /proc/cmdline
 
-    setprop wifi.interface wlan0
+    setprop wifi.interface wlan
 
 #   Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
